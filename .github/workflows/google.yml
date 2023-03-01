@@ -33,4 +33,4 @@ jobs:
           run: docker push $IMAGE_NAME
 
         - name: Deploy Docker image
-          run: gcloud compute instances update-container $VM_NAME --zone us-central1-a --container-env bot_token=$BOT_TOKEN --container-image $IMAGE_NAME
+          run: gcloud compute instances update-container $VM_NAME --zone us-central1-a --container-env bot_token=$BOT_TOKEN,db_host=$DB_HOST,db_name=$DB_NAME,db_pwd=$DB_PWD,db_user=$DB_USER --container-image $IMAGE_NAME
