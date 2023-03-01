@@ -1,1 +1,0 @@
-start_message = "Start message"
