@@ -22,11 +22,11 @@ def add_me_command(message):
     user = message.from_user
     user_values = (user.id, user.username.lower(), user.first_name, user.last_name)
     try:
-        if execute_query(queries.chat_exists, chat_id)[0][0] == 0:
-            execute_query(queries.add_chat, chat_id)
-        if execute_query(queries.user_exists, user.id)[0][0] == 0:
+        if execute_query(queries.chat_exists, (chat_id,))[0][0] == 0:
+            execute_query(queries.add_chat, (chat_id,))
+        if execute_query(queries.user_exists, (user.id,))[0][0] == 0:
             query_res = execute_query(queries.add_user, user_values)
-            execute_query(queries.add_user_chat, (user.id, chat_id))
+            execute_query(queries.add_user_chat, (user.id, (chat_id,)))
             bot.send_message(chat_id, user_msgs.user_added_to_group.format(username=user.username))
         else:
             bot.send_message(chat_id, user_msgs.user_already_in_group.format(username=user.username))
