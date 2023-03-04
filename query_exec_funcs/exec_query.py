@@ -5,7 +5,7 @@ import os
 
 
 db_host = os.environ.get("db_host")
-db_name = os.environ.get("database")
+db_name = os.environ.get("db_name")
 db_user = os.environ.get("db_user")
 db_pwd = os.environ.get("db_pwd")
 
