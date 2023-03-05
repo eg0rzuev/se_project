@@ -33,3 +33,12 @@ add_transaction = """   INSERT INTO transactions
                         (chat_id, amount, lender, borrower, date_time, notes)
                         VALUES
                         (%s,%s,%s,%s,%s,%s);"""
+curr_state = """    SELECT username, balance
+                    FROM users_chats 
+                    INNER JOIN users u ON u.user_id = users_chats.user_id
+                    WHERE users_chats.chat_id = %s;"""
+get_transactions = """  SELECT u1.username as lender_uname, u2.username as borrower_uname, amount, date_time, notes
+                        FROM transactions 
+                        INNER JOIN users u1 ON lender = u1.user_id
+                        INNER JOIN users u2 ON borrower = u2.user_id
+                        WHERE chat_id = %s;"""

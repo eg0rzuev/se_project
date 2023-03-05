@@ -10,7 +10,7 @@ import time
 from query_exec_funcs.helper_funcs import *
 
 
-bot: TeleBot = telebot.TeleBot(os.environ.get('bot_token'))
+bot: TeleBot = telebot.TeleBot(os.environ.get('bot_token'), parse_mode="MARKDOWN")
 
 
 @bot.message_handler(commands=['start'])
@@ -83,14 +83,36 @@ def add_loan_command(message):
                 bot.send_message(chat_id, user_msgs.user_not_in_group.format(username=username))
                 return
             user_ids.append(user_id)
-        #print("username = ", unames[0], " chat id = ", chat_id, " amount = ", amount)
         change_balance(user_ids[0], chat_id, -amount)
         change_balance(user_ids[1], chat_id, amount)
-        execute_query(queries.add_transaction, (chat_id, amount, user_ids[1], user_ids[0], round(time.time() * 1000), notes))
+        execute_query(queries.add_transaction, (chat_id, amount, user_ids[1], user_ids[0], round(time.time()), notes))
         bot.send_message(chat_id, user_msgs.balance_change.format(usr0=unames[0], usr1=unames[1], amount=amount))
     except Exception as error:
         bot.send_message(chat_id, user_msgs.internal_db_error)
         print(error)
+
+@bot.message_handler(commands=['current_state'])
+def curr_state_command(message):
+    chat_id = message.chat.id
+    try:
+        query_res = execute_query(queries.curr_state, (chat_id,))
+        if not query_res:
+            bot.send_message(chat_id, user_msgs.empty_group)
+            return
+        print(query_res)
+        output_msg = beautify_balance_output(query_res)
+        bot.send_message(chat_id, output_msg)
+    except Exception as error:
+        bot.send_message(chat_id, user_msgs.internal_db_error)
+        print(error)
+
+@bot.message_handler(commands=['show_transactions'])
+def show_transactions(message):
+    chat_id = message.chat.id
+    query_res = execute_query(queries.get_transactions, (chat_id,))
+    output_msg = beautify_transactions_output(query_res)
+    bot.send_message(chat_id, output_msg)
+
 
 
 bot.infinity_polling()

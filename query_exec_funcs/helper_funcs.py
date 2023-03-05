@@ -1,7 +1,8 @@
 from constants import queries
 from query_exec_funcs.exec_query import *
 import re
-
+from datetime import datetime
+import constants.user_msgs
 
 def is_user_in_chat(user_id, chat_id):
     user_in_chat = execute_query(queries.user_chat_exists, (user_id, chat_id))[0][0]
@@ -49,3 +50,25 @@ def change_balance(user_id, chat_id, balance_diff):
 def to_common_float(num):
     num = num.replace(",", ".", 1)
     return float(num)
+
+def beautify_balance_output(data_rows):
+    output_msg = user_msgs.users_balance_bold + "\n"
+    for user, amount in data_rows:
+        output_msg += user_msgs.uname_balance.format(user=user, amount=amount) + "\n"
+    return output_msg
+
+
+def format_unix_time(unix_time):
+    return datetime.utcfromtimestamp(unix_time).strftime('%Y-%m-%d %H:%M:%S')
+
+def beautify_transactions_output(data_rows):
+    output = user_msgs.transactions_header
+    for row in data_rows:
+        lender_uname, borrower_uname, amount, unix_date, notes = row
+        print(unix_date)
+        date_time = format_unix_time(unix_date)
+        output += user_msgs.transactions_values.format(lender_uname, borrower_uname, amount, date_time, notes)
+    return output
+
+
+
