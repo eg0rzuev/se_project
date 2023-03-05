@@ -1,5 +1,12 @@
 from constants import queries
 from query_exec_funcs.exec_query import *
+import re
+
+
+def is_user_in_chat(user_id, chat_id):
+    user_in_chat = execute_query(queries.user_chat_exists, (user_id, chat_id))[0][0]
+    return not(user_in_chat == 0)
+
 
 
 def check_add_user_chat(chat_id, user, user_values):
@@ -7,7 +14,38 @@ def check_add_user_chat(chat_id, user, user_values):
         execute_query(queries.add_chat, (chat_id,))
     if execute_query(queries.user_exists, (user.id,))[0][0] == 0:
         execute_query(queries.add_user, user_values)
-    user_in_chat = execute_query(queries.user_chat_exists, (user.id, chat_id))[0][0]
-    if user_in_chat == 0:
+    user_in_chat = is_user_in_chat(user.id, chat_id)
+    if not user_in_chat:
         execute_query(queries.add_user_chat, (user.id, chat_id))
     return user_in_chat
+
+
+def is_valid_amount(num):
+    if re.match(r"^[0-9]+([,.][0-9]{1,2})?$", num):
+        return True
+    return False
+
+
+def get_uid(username):
+    try:
+        return execute_query(queries.get_user_id, (username,))[0][0]
+    except IndexError as e:
+        return None
+    except Exception as e:
+        print(e)
+        raise e
+
+def change_balance(user_id, chat_id, balance_diff):
+    try:
+        query_res = execute_query(queries.get_user_balance, (user_id, chat_id))
+        old_balance = query_res[0][0]
+        new_balance = old_balance + balance_diff
+        execute_query(queries.change_balance, (new_balance, user_id, chat_id))
+    except Exception as error:
+        print(error)
+        raise error
+
+
+def to_common_float(num):
+    num = num.replace(",", ".", 1)
+    return float(num)
