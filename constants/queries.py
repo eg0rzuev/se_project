@@ -42,3 +42,9 @@ get_transactions = """  SELECT u1.username as lender_uname, u2.username as borro
                         INNER JOIN users u1 ON lender = u1.user_id
                         INNER JOIN users u2 ON borrower = u2.user_id
                         WHERE chat_id = %s;"""
+all_balance = """ SELECT username, balance
+                    FROM users_chats 
+                    INNER JOIN users u 
+                    ON u.user_id = users_chats.user_id
+                    WHERE chat_id = %s;
+"""

@@ -13,3 +13,5 @@ uname_balance = "{user}: {amount}"
 empty_group = "Empty group! No records found!"
 transactions_header = "{:<33} {:<32} {:<10} {:<30} {:<50}\n".format("Lender", "Borrower", "Amount", "Date time", "Notes")
 transactions_values = "{:<32} {:<32} {:<10} {:<30} {:<50}\n"
+integrity_error = "Integrity error! Database has mistaken records"
+has_to_transfer = "{user1} has to transfer {amount} to {user2}"

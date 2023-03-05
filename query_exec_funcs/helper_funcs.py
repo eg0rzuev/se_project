@@ -2,6 +2,7 @@ from constants import queries
 from query_exec_funcs.exec_query import *
 import re
 from datetime import datetime
+from tabulate import tabulate
 import constants.user_msgs
 
 def is_user_in_chat(user_id, chat_id):
@@ -63,12 +64,19 @@ def format_unix_time(unix_time):
 
 def beautify_transactions_output(data_rows):
     output = user_msgs.transactions_header
+    print(output)
     for row in data_rows:
         lender_uname, borrower_uname, amount, unix_date, notes = row
         print(unix_date)
         date_time = format_unix_time(unix_date)
         output += user_msgs.transactions_values.format(lender_uname, borrower_uname, amount, date_time, notes)
     return output
+
+def beautify_finilize(arr):
+    output_msg = ""
+    for user1, user2, amount in arr:
+        output_msg += user_msgs.has_to_transfer.format(user1=user1, user2=user2, amount=amount) + "\n"
+    return output_msg
 
 
 

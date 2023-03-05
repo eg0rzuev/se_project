@@ -110,9 +110,38 @@ def curr_state_command(message):
 def show_transactions(message):
     chat_id = message.chat.id
     query_res = execute_query(queries.get_transactions, (chat_id,))
-    output_msg = beautify_transactions_output(query_res)
+    query_res = [(x[0], x[1], x[2], format_unix_time(x[3]), x[4]) for x in query_res]
+    output_msg = tabulate(query_res, headers=["lender", "borrower", "amount", "date time", "notes"], tablefmt='orgtbl')
     bot.send_message(chat_id, output_msg)
 
+@bot.message_handler(commands=['finalize'])
+def finalize_command(message):
+    chat_id = message.chat.id
+    try:
+        query_res = [list(x) for x in execute_query(queries.all_balance, (chat_id,))]
+        query_res.sort(key=lambda x: x[1])
+        if round(sum([x[1] for x in query_res]), 2) != 0:
+            bot.send_message(chat_id, user_msgs.integrity_error)
+            return
+        left, right = 0, len(query_res) - 1
+        res = []
+        while left < right:
+            if abs(query_res[left][1]) >= query_res[right][1]:
+                res.append((query_res[left][0], query_res[right][0], query_res[right][1]))
+                query_res[left][1] += query_res[right][1]
+                query_res[right][1] = 0
+            else:
+                res.append((query_res[left][0], query_res[right][0], -query_res[left][1]))
+                query_res[right][1] += query_res[left][1]
+                query_res[left][1] = 0
+            if query_res[right][1] == 0:
+                right -= 1
+            if query_res[left][1] == 0:
+                left += 1
+        bot.send_message(chat_id, beautify_finilize(res))
+    except Exception as error:
+        print(error)
+        bot.send_message(chat_id, user_msgs.internal_db_error)
 
 
 bot.infinity_polling()
