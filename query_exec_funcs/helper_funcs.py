@@ -2,8 +2,10 @@ from constants import queries
 from query_exec_funcs.exec_query import *
 import re
 from datetime import datetime
+from constants.common_constants import *
+from constants.user_msgs import msgs
 from tabulate import tabulate
-import constants.user_msgs
+#import constants.user_msgs
 
 def is_user_in_chat(user_id, chat_id):
     user_in_chat = execute_query(queries.user_chat_exists, (user_id, chat_id))[0][0]
@@ -52,30 +54,30 @@ def to_common_float(num):
     num = num.replace(",", ".", 1)
     return float(num)
 
-def beautify_balance_output(data_rows):
-    output_msg = user_msgs.users_balance_bold + "\n"
+def beautify_balance_output(data_rows, lang=EN):
+    output_msg = msgs[users_balance_bold][lang] + "\n"
     for user, amount in data_rows:
-        output_msg += user_msgs.uname_balance.format(user=user, amount=amount) + "\n"
+        output_msg += msgs[uname_balance][lang].format(user=user, amount=amount) + "\n"
     return output_msg
 
 
 def format_unix_time(unix_time):
     return datetime.utcfromtimestamp(unix_time).strftime('%Y-%m-%d %H:%M:%S')
 
-def beautify_transactions_output(data_rows):
-    output = user_msgs.transactions_header
+def beautify_transactions_output(data_rows, lang=EN):
+    output = msgs[transactions_header][lang]
     print(output)
     for row in data_rows:
         lender_uname, borrower_uname, amount, unix_date, notes = row
         print(unix_date)
         date_time = format_unix_time(unix_date)
-        output += user_msgs.transactions_values.format(lender_uname, borrower_uname, amount, date_time, notes)
+        output += msgs[transactions_values][lang].format(lender_uname, borrower_uname, amount, date_time, notes)
     return output
 
-def beautify_finilize(arr):
+def beautify_finilize(arr, lang=EN):
     output_msg = ""
     for user1, user2, amount in arr:
-        output_msg += user_msgs.has_to_transfer.format(user1=user1, user2=user2, amount=amount) + "\n"
+        output_msg += msgs[has_to_transfer][lang].format(user1=user1, user2=user2, amount=amount) + "\n"
     return output_msg
 
 
