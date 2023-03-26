@@ -4,6 +4,8 @@ import re
 from datetime import datetime
 from constants.common_constants import *
 from constants.user_msgs import msgs
+import random
+from datetime import datetime
 from tabulate import tabulate
 #import constants.user_msgs
 
@@ -77,8 +79,17 @@ def beautify_transactions_output(data_rows, lang=EN):
 def beautify_finilize(arr, lang=EN):
     output_msg = ""
     for user1, user2, amount in arr:
-        output_msg += msgs[has_to_transfer][lang].format(user1=user1, user2=user2, amount=amount) + "\n"
+        output_msg += msgs[has_to_transfer][lang].format(user1=user1, user2=user2, amount=round(amount,2)) + "\n"
     return output_msg
+
+
+def generate_username():
+    with open("constants/temp_unames.txt", "r") as f:
+        words = [word.strip() for word in f.readlines()]
+    username = random.choice(words)
+    return username
+
+
 
 
 

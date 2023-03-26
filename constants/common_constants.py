@@ -23,6 +23,7 @@ enter_only_amount = "enter_only_amount"
 specify_the_language = "specify_the_language"
 lang_not_supported = "lang_not_supported"
 lang_changed = "lang_changed"
+UNAME_GENERATED = "uname_generated"
 LANGUAGES = ["en", "it", "ru"]
 EN="en"
 IT="it"

@@ -50,9 +50,9 @@ msgs = {
         "ru": "Баланс {usr0} уменьшается на {amount}\nБаланс {usr1} увеличивается на {amount}"
     },
     "user_balance_bold": {
-        "en": "*Users' balance:*",
-        "it": "*Bilancio utenti:*",
-        "ru": "*Баланс пользователей:*"
+        "en": "<b>Users' balance:</b>",
+        "it": "<b>Bilancio utenti:</b>",
+        "ru": "<b>Баланс пользователей:</b>"
     },
     "uname_balance": {
         "en": "{user}: {amount}",
@@ -123,5 +123,10 @@ msgs = {
         "en": "Language changed from {lang0} to {lang1}",
         "it": "Lingua è cambiata da {lang0} a {lang1}",
         "ru": "Язык изменён с {lang0} на {lang1}"
+    },
+    "uname_generated": {
+        "en": "No username, so internal username generated: <b>{uname}</b>, first name: {fname}",
+        "it": "Non c'è l'username quindi il nome utente interno generato: <b>{uname}</b>, nome: {fname}",
+        "ru": "Нет имени пользователя, сгенерирован внутренний юзернейм: <b>{uname}</b>, имя: {fname}"
     }
 }

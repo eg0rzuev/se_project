@@ -89,15 +89,15 @@ insert_transaction = """    INSERT INTO transactions
 """
 borr_msg_in_temp_tr  = """  SELECT COUNT(1)
                             FROM temp_transactions
-                            WHERE borrower_msg_id = %s AND chat_id = %s;
+                            WHERE borrower_msg_id = %s AND chat_id = %s AND borrower_uid IS NULL;
 """
 lend_msg_in_temp_tr = """   SELECT COUNT(1)
                             FROM temp_transactions
-                            WHERE lender_msg_id = %s AND chat_id = %s;
+                            WHERE lender_msg_id = %s AND chat_id = %s AND lender_uid IS NULL;
 """
 amount_msg_in_temp_tr = """ SELECT COUNT(1)
                             FROM temp_transactions
-                            WHERE amount_msg_id = %s AND chat_id = %s;
+                            WHERE amount_msg_id = %s AND chat_id = %s AND amount IS NULL;
 """
 uid_from_temp_tr = """  SELECT lender_uid, borrower_uid
                         FROM temp_transactions
@@ -114,4 +114,9 @@ get_chat_lang = """ SELECT language
 set_chat_lang = """ UPDATE chats
                     SET language = %s 
                     WHERE chat_id = %s;
+"""
+check_uname_in_chat = """   SELECT COUNT(1)
+                            FROM users u
+                            INNER JOIN users_chats uc ON u.user_id = uc.user_id
+                            WHERE username = %s;
 """
