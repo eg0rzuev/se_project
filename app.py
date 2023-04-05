@@ -9,6 +9,7 @@ from query_exec_funcs.exec_query import *
 from datetime import datetime
 import time
 from query_exec_funcs.helper_funcs import *
+
 #initializing the bot
 bot: TeleBot = telebot.TeleBot(os.environ.get('bot_token'), parse_mode="HTML")
 

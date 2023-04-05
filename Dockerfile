@@ -1,10 +1,12 @@
 FROM python:3.11.2-slim-buster
+ENV PATH "/root/.local/bin:$PATH"
+COPY pyproject.toml ./
 RUN apt-get update \
-    && apt-get -y install libpq-dev gcc git\
+    && apt-get -y install libpq-dev=11.19-0+deb10u1 gcc git curl\
     && pip3 install --upgrade pip \
-    && pip3 install pyTelegramBotAPI \
-    && pip3 install psycopg2 \
-    && pip3 install tabulate
+    && curl -sSL https://install.python-poetry.org | python3 - --version 1.2.0 \
+    && poetry config virtualenvs.create false \
+    && poetry install --no-dev
 COPY app.py ./
 COPY constants ./constants
 COPY query_exec_funcs ./query_exec_funcs
